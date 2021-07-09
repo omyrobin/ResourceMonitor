@@ -1,6 +1,11 @@
 package com.omyrobin.puglin.utils;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 /**
  * @Author: omyrobin
@@ -17,6 +22,21 @@ public class ImageUtil {
     public static boolean isImage(File file) {
         if (file.getName().endsWith(JPG) || file.getName().endsWith(JPEG) || file.getName().endsWith(PNG) && !file.getName().endsWith(D_9PNG)) {
             return true;
+        }
+        return false;
+    }
+
+    public static boolean isLargeImage(File file, int maxWidth, int maxHeight) {
+        if(isImage(file)){
+            try {
+                BufferedImage read = ImageIO.read(new FileInputStream(file));
+                if (read.getHeight() > maxHeight || read.getWidth() > maxWidth) {
+                    return true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
         }
         return false;
     }

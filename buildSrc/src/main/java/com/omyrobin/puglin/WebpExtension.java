@@ -8,16 +8,30 @@ import java.util.ArrayList;
  * @Description:
  */
 public class WebpExtension {
-
+    /**
+     * 白名单 用来过滤不需要转换的图片
+     */
     ArrayList<String> whiteList = new ArrayList<>();
-
+    /**
+     * appIcon
+     */
     String appIconName = "";
-
+    /**
+     * appRoundIcon
+     */
     String appIconRoundName = "";
-
+    /**
+     * webp压缩质量
+     */
     int quality;
-
-    int[] bigImage;
+    /**
+     * 最大宽度
+     */
+    int maxWidth;
+    /**
+     * 最大高度
+     */
+    int maxHeight;
 
     public ArrayList<String> getWhiteList() {
         return whiteList;
@@ -51,11 +65,19 @@ public class WebpExtension {
         this.quality = quality;
     }
 
-    public int[] getBigImage() {
-        return bigImage;
+    public int getMaxWidth() {
+        return maxWidth;
     }
 
-    public void setBigImage(int[] bigImage) {
-        this.bigImage = bigImage;
+    public void setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+    }
+
+    public int getMaxHeight() {
+        return maxHeight;
+    }
+
+    public void setMaxHeight(int maxHeight) {
+        this.maxHeight = maxHeight;
     }
 }

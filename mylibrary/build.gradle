@@ -6,6 +6,11 @@ apply plugin: 'com.omyrobin.resourcemonitor'
 
 Webp {
     quality = 75
+    appIconName = "ic_launcher.png"
+    appIconRoundName = "ic_launcher_round.png"
+    maxWidth = 700
+    maxHeight = 800
+    whiteList = []
 }
 
 android {

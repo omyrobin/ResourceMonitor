@@ -15,6 +15,7 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.tasks.TaskInputs;
 
+import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
@@ -40,21 +41,25 @@ public class WebpPlugin implements Plugin<Project> {
      */
     private WebpExtension webPExtension;
     /**
-     * 缓存列表
+     * 缓存列表 用于优化遍历
      */
     private ArrayList<String> cacheList = new ArrayList<>();
     /**
-     * 用户配置的白名单
+     *
      */
+    private ArrayList<String> largeList = new ArrayList<>();
+    //以下字段用来接收用户配置数据
     private ArrayList<String> whiteList;
-    /**
-     * 转换压缩质量
-     */
+
     private int quality;
 
     private String appIcon;
 
     private String appIconRound;
+
+    private int maxWidth;
+
+    private int maxHeight;
 
     @Override
     public void apply(Project project) {
@@ -117,6 +122,8 @@ public class WebpPlugin implements Plugin<Project> {
                 for (File file : files) {
                     recursionFile(file);
                 }
+                //输出大图列表
+                printLargeImage();
             }
         });
     }
@@ -134,9 +141,14 @@ public class WebpPlugin implements Plugin<Project> {
                 recursionFile(f);
             }
         } else {
-
             //如果符合要求的图片
             if (filterRule(file)) {
+                //如果超出尺寸限制
+                if(ImageUtil.isLargeImage(file, maxWidth, maxHeight)){
+                    largeList.add(file.getAbsolutePath());
+                    return;
+                }
+
                 if (!cacheList.contains(file.getAbsolutePath())) {
                     cacheList.add(file.getAbsolutePath());
 
@@ -177,6 +189,10 @@ public class WebpPlugin implements Plugin<Project> {
         appIcon = webPExtension.getAppIconName();
         //app icon round
         appIconRound = webPExtension.getAppIconRoundName();
+        //最大宽度
+        maxWidth = webPExtension.getMaxWidth();
+        //最大高度
+        maxHeight = webPExtension.getMaxHeight();
     }
 
     /**
@@ -199,6 +215,19 @@ public class WebpPlugin implements Plugin<Project> {
             return true;
         }
         return false;
+    }
+
+    private void printLargeImage() {
+        if(largeList.size()>0) {
+            StringBuilder builder = new StringBuilder("Waring Large list : \n");
+
+            for (String path: largeList) {
+                builder.append(path);
+                builder.append("\n");
+            }
+
+            System.err.println(builder.toString());
+        }
     }
 }
 
